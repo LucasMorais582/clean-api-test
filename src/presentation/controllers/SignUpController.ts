@@ -6,7 +6,7 @@ import { Controller } from '../protocols/Controller'
 
 export class SignUpController implements Controller {
   handle (httpRequest: HttpRequest): HttpResponse {
-    const requiredParams = ['name', 'email', 'password']
+    const requiredParams = ['name', 'email', 'password', 'passwordConfirmation']
 
     for (const param of requiredParams) {
       if (!httpRequest.body[param]) {
