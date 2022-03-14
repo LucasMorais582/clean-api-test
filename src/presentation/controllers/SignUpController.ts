@@ -5,10 +5,17 @@ import { HttpHelper } from '../helpers/HttpHelper'
 
 export class SignUpController {
   handle (httpRequest: HttpRequest): HttpResponse {
-    if (!httpRequest.body.name) {
-      return HttpHelper.badRequest(new MissingParamError('name'))
+    const requiredParams = ['name', 'email']
+
+    for (const param of requiredParams) {
+      if (!httpRequest.body[param]) {
+        return HttpHelper.badRequest(new MissingParamError(param))
+      }
     }
 
-    return HttpHelper.badRequest(new MissingParamError('email'))
+    return {
+      statusCode: 200,
+      body: {}
+    }
   }
 }
