@@ -15,16 +15,14 @@ export class SignUpController implements Controller {
       const { body } = httpRequest
 
       for (const param of requiredParams) {
-        if (!body[param]) {
-          return HttpHelper.badRequest(new MissingParamError(param))
-        }
+        if (!body[param]) { return HttpHelper.badRequest(new MissingParamError(param)) }
       }
 
-      const isEmailValid = this.emailValidator.isValid(body.email)
+      const { email } = body
 
-      if (!isEmailValid) {
-        return HttpHelper.badRequest(new InvalidParamError('email'))
-      }
+      const isEmailValid = this.emailValidator.isValid(email)
+
+      if (!isEmailValid) { return HttpHelper.badRequest(new InvalidParamError('email')) }
 
       return {
         statusCode: 200,
