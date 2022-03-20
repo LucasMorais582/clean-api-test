@@ -31,12 +31,9 @@ export class SignUpController implements Controller {
         return HttpHelper.badRequest(new InvalidParamError('passwordConfirmation'))
       }
 
-      this.addAccount.add({ name, email, password })
+      const account = this.addAccount.add({ name, email, password })
 
-      return {
-        statusCode: 200,
-        body: {}
-      }
+      return HttpHelper.created(account)
     } catch (error) {
       // TODO: use the error object
 

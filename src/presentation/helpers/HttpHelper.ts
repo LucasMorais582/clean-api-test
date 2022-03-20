@@ -1,5 +1,5 @@
-import { HttpResponse } from '../protocols/HttpResponse'
-import { ServerError } from '../errors/ServerError'
+import { HttpResponse } from '../protocols'
+import { ServerError } from '../errors'
 
 export const HttpHelper = {
   badRequest (error: Error): HttpResponse {
@@ -13,6 +13,13 @@ export const HttpHelper = {
     return {
       statusCode: 500,
       body: new ServerError()
+    }
+  },
+
+  created (data: any = {}): HttpResponse {
+    return {
+      statusCode: 201,
+      body: data
     }
   }
 }
