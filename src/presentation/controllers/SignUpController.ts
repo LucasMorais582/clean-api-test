@@ -1,12 +1,15 @@
 import { Controller, EmailValidator, HttpRequest, HttpResponse } from '../protocols'
 import { InvalidParamError, MissingParamError } from '../errors'
 import { HttpHelper } from '../helpers/HttpHelper'
+import { AddAccount } from '../../domain/usecases/AddAccount'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
+  private readonly addAccount: AddAccount
 
-  constructor (emailValidator: EmailValidator) {
+  constructor (emailValidator: EmailValidator, addAccount: AddAccount) {
     this.emailValidator = emailValidator
+    this.addAccount = addAccount
   }
 
   handle (httpRequest: HttpRequest): HttpResponse {
@@ -18,12 +21,17 @@ export class SignUpController implements Controller {
         if (!body[param]) { return HttpHelper.badRequest(new MissingParamError(param)) }
       }
 
-      const { email } = body
-      const isEmailValid = this.emailValidator.isValid(email)
-      if (!isEmailValid) { return HttpHelper.badRequest(new InvalidParamError('email')) }
+      const { name, email, password, passwordConfirmation } = body
 
-      const { password, passwordConfimation } = body
-      if (password !== passwordConfimation) { return HttpHelper.badRequest(new InvalidParamError('passwordConfirmation')) }
+      if (!this.emailValidator.isValid(email)) {
+        return HttpHelper.badRequest(new InvalidParamError('email'))
+      }
+
+      if (password !== passwordConfirmation) {
+        return HttpHelper.badRequest(new InvalidParamError('passwordConfirmation'))
+      }
+
+      this.addAccount.add({ name, email, password })
 
       return {
         statusCode: 200,
