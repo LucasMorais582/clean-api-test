@@ -21,9 +21,9 @@ const makeEmailValidator = (): EmailValidator => {
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     add = (account: AddAccountModel): AccountModel => ({
+      id: 'valid_id',
       name: 'valid_name',
-      email: 'valid_email',
-      password: 'valid_password'
+      email: 'valid_email'
     })
   }
 
